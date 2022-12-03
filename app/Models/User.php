@@ -2,16 +2,23 @@
 
 namespace App\Models;
 
+use App\Jobs\NewUserRegisterJob;
+use App\Traits\ManagePermission;
+use Laravel\Sanctum\HasApiTokens;
+use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
-use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, ManagePermission;
+    /*
+    |--------------------------------------------------------------------------
+    | goblan variables
+    |--------------------------------------------------------------------------
+    */
 
     /**
      * The attributes that are mass assignable.
@@ -19,16 +26,10 @@ class User extends Authenticatable implements JWTSubject
      * @var array<int, string>
      */
     protected $fillable = [
-        'first_name',
-        'last_name',
         'username',
         'email',
         'password',
-        'updated_at',
-        'created_at',
-        'is_active',
-        'image',
-        'role_id',
+        'is_active'
     ];
 
     /**
@@ -37,7 +38,6 @@ class User extends Authenticatable implements JWTSubject
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
         'password',
         'remember_token',
     ];
@@ -51,7 +51,11 @@ class User extends Authenticatable implements JWTSubject
         'email_verified_at' => 'datetime',
     ];
 
-
+    /*
+    |--------------------------------------------------------------------------
+    | functions
+    |--------------------------------------------------------------------------
+    */
 
     public function getJWTIdentifier() {
         return $this->getKey();
@@ -59,5 +63,41 @@ class User extends Authenticatable implements JWTSubject
 
     public function getJWTCustomClaims() {
             return [];
+    }
+
+    protected static function boot(){
+
+        parent::boot();
+
+        static::created(function($user){
+
+            NewUserRegisterJob::dispatch(
+                $user
+            )->onQueue("high");
+        });
+
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | RELATIONS
+    |--------------------------------------------------------------------------
+    */
+
+    public function directories(){
+        return $this->hasMany(Directory::class, 'user_id');
+    }
+
+    public function pagos(){
+        return $this->hasMany(Pagos::class, 'user_id');
+    }
+
+    public function profile()
+    {
+        return $this->hasOne(Profile::class, 'user_id');
+    }
+
+    public function roles() {
+        return $this->belongsToMany(Role::class);
     }
 }

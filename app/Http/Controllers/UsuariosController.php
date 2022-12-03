@@ -123,8 +123,6 @@ class UsuariosController extends Controller
         ], 200);
     }
 
-
-
     public function update($id, Request $request){
         // recoger los datos por post
         $json = $request->input('json', null);

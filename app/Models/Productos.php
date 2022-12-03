@@ -21,6 +21,7 @@ class Productos extends Model
     public function pagos(){
         return $this->belongsTo('App\Models\Pagos', 'producto_id');
     }
+    
     public function usuarios(){
         return $this->belongsTo('App\Models\Usuarios', 'user_id');
     }
