@@ -15,25 +15,39 @@ class Usuarios extends Model
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    /*
+    |--------------------------------------------------------------------------
+    | goblan variables
+    |--------------------------------------------------------------------------
+    */
     protected $fillable = [
-        'first_name',
-        'last_name',
         'username',
         'email',
         'password',
         'updated_at',
         'created_at',
         'is_active',
-        'image',
         'role_id',
     ];
+
+    /*
+    |--------------------------------------------------------------------------
+    | RELATIONS
+    |--------------------------------------------------------------------------
+    */
 
     // Relacion de uno a muchos
 
     public function directorios(){
         return $this->hasMany('App\Models\Directorio', 'user_id');
     }
+
     public function pagos(){
         return $this->hasMany('App\Models\Pagos', 'user_id');
+    }
+
+    public function profile()
+    {
+        return $this->hasOne(Profile::class);
     }
 }

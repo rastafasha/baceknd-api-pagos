@@ -4,10 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
-use App\Models\Usuarios;
 
-class Directorio extends Model
+class Directory extends Model
 {
     use HasFactory;
 
@@ -39,12 +37,20 @@ class Directorio extends Model
         'created_at',
     ];
 
-    // Relacion de uno a muchos
-    public function users(){
-        return $this->belongsTo('App\Models\User', 'user_id');
-    }
+    /*
+    |--------------------------------------------------------------------------
+    | functions
+    |--------------------------------------------------------------------------
+    */
     
-    public function usuarios(){
-        return $this->belongsTo('App\Models\Usuarios', 'id');
+
+    /*
+    |--------------------------------------------------------------------------
+    | RELATIONS
+    |--------------------------------------------------------------------------
+    */
+
+    public function users(){
+        return $this->belongsTo(User::class, 'user_id');
     }
 }
