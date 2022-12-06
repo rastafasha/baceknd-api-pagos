@@ -67,8 +67,8 @@ class ProductController extends Controller
             $product = new Product();
 
             $file = null;
-            if ($request->hasFile('image')) {
-                $file = Uploader::uploadFile('image', 'public/plans');
+            if ($request->hasFile('image|')) {
+                $file = Uploader::uploadFile('image|', 'public/plans');
             }
 
             $input = $this->currencyInput($file);

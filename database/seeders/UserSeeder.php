@@ -131,32 +131,32 @@ class UserSeeder extends Seeder
 
         // permission number 13
         $permission = Permission::create([
-            'name' => 'list.products',
-            'description' => 'Puede listar los productos',
+            'name' => 'list.plans',
+            'description' => 'Puede listar los planes',
         ]);
 
         $permissions_all[] = $permission->id;
 
          // permission number 14
         $permission = Permission::create([
-            'name' => 'show.product',
-            'description' => 'Puede ver el producto',
+            'name' => 'show.plan',
+            'description' => 'Puede ver el Plan',
         ]);
 
         $permissions_all[] = $permission->id;
         
         // permission number 15
         $permission = Permission::create([
-            'name' => 'edit.product',
-            'description' => 'Puede editar el producto',
+            'name' => 'edit.plan',
+            'description' => 'Puede editar el Plan',
         ]);
 
         $permissions_all[] = $permission->id;
         
         // permission number 16
         $permission = Permission::create([
-            'name' => 'destroy.product',
-            'description' => 'Puede eliminar el producto',
+            'name' => 'destroy.plan',
+            'description' => 'Puede eliminar el Plan',
         ]);
 
         $permissions_all[] = $permission->id;

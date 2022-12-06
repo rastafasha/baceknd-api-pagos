@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use Illuminate\Support\Facades\Log;
 use App\Mail\NewUserRegisterMail;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
@@ -45,7 +46,7 @@ class NewUserRegisterJob implements ShouldQueue
                     )
                 );
         } catch (\Exception $exception) {
-            \Log::info($exception->getMessage());
+            Log::info($exception->getMessage());
         }
     }
 }

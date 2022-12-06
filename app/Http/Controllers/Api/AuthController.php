@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -16,15 +17,15 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
 {
-    // /**
-    //  * Create a new AuthController instance.
-    //  *
-    //  * @return void
-    //  */
-    // public function __construct()
-    // {
-    //     $this->middleware('auth:api', ['except' => ['login', 'register']]);
-    // }
+    /**
+     * Create a new AuthController instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware(['api', 'JwtAuth'], ['except' => ['login', 'register']]);
+    }
 
     /**
      * Get a JWT via given credentials.
@@ -74,6 +75,8 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password)
         ]);
+
+        $user->roles()->attach(Role::where('name', 'Invitado')->first());
 
         $token = JWTAuth::fromUser($user);
 

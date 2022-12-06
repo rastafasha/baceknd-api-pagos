@@ -23,36 +23,33 @@ use App\Http\Controllers\DirectorioController;
 |
 */
 
-Route::post('register', [AuthController::class, 'register'])
-    ->name('register');
+// Route::post('register', [AuthController::class, 'register'])
+//     ->name('register');
 
-Route::post('login', [AuthController::class, 'login'])
-    ->name('login');
+// Route::post('login', [AuthController::class, 'login'])
+//     ->name('login');
 
-Route::group(['middleware' => 'api', 'JwtAuth', 'prefix' => 'auth'], function ($router) {
+Route::group(['middleware' => 'api', 'JwtAuth'], function ($router) {
 
     // Auth
-    require __DIR__ . '/routes/auth.php';
+    require __DIR__ . '/api_routes/auth.php';
 
     // Currency
-    require __DIR__ . '/routes/currency.php';
+    require __DIR__ . '/api_routes/currency.php';
 
     // Directorios
-    require __DIR__ . '/routes/directorios.php';
+    require __DIR__ . '/api_routes/directory.php';
 
     // Pagos
-    require __DIR__ . '/routes/pagos.php';
+    require __DIR__ . '/api_routes/payment.php';
 
     // Pagos
-    require __DIR__ . '/routes/permissions.php';
+    require __DIR__ . '/api_routes/permissions.php';
 
     // Productos
-    require __DIR__ . '/routes/products.php';
-    
-    // Perfil
-    require __DIR__ . '/routes/profile.php';
+    require __DIR__ . '/api_routes/plans.php';
 
     // Roles
-    require __DIR__ . '/routes/roles.php';
+    require __DIR__ . '/api_routes/roles.php';
 
 });
