@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Usuarios;
+
 use JWTAuth;
-use Tymon\JWTAuth\Exceptions\JWTException;
+use App\Models\User;
+use Illuminate\Http\Request;
+use App\Http\Requests\RegisterRequest;
 use Illuminate\Support\Facades\Validator;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 
 class UserAuthController extends Controller
@@ -29,11 +31,12 @@ class UserAuthController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function register(Request $request) {
+
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|string|between:2,100',
             'last_name' => 'required|string|between:2,100',
             'username' => 'required|string|between:2,100',
-            'email' => 'required|string|email|max:100|unique:usuarios',
+            'email' => 'required|string|email|max:100|unique:user',
             'password' => 'required|string|min:5',
         ]);
 
@@ -41,7 +44,7 @@ class UserAuthController extends Controller
             return response()->json($validator->errors(), 422);
         }
 
-        $usuarios = Usuarios::create(array_merge(
+        $usuarios = User::create(array_merge(
             $validator->validated(),
             ['password' => bcrypt($request->password)]
         ));
@@ -114,7 +117,4 @@ class UserAuthController extends Controller
         auth()->logout();
         return response()->json(['status' => 'success', 'message' => 'User logged out successfully']);
     }
-
-    //crud
-
 }

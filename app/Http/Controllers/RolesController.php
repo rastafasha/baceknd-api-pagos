@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Models\Roles;
+use App\Models\Role;
 use App\Models\User;
 use App\Models\Usuarios;
 use JWTAuth;
@@ -28,7 +28,7 @@ class RolesController extends Controller
 
     public function index()
     {
-        $roles = Roles::all(); // obtiene todo como un get
+        $roles = Role::all(); // obtiene todo como un get
 
         return response()->json([
             'code' => 200,

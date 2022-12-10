@@ -1,14 +1,16 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\UserAuthController;
-use App\Http\Controllers\RolesController;
-use App\Http\Controllers\DirectorioController;
-use App\Http\Controllers\UsuariosController;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PagosController;
+use App\Http\Controllers\RolesController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\UsuariosController;
 use App\Http\Controllers\ProductosController;
+use App\Http\Controllers\DirectorioController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,47 +23,33 @@ use App\Http\Controllers\ProductosController;
 |
 */
 
-Route::group(['middleware' => 'api'], function ($router) {
-    Route::post('register', [UserAuthController::class, 'register']);
-    Route::post('login', [UserAuthController::class, 'login']);
-    Route::get('user', [UserAuthController::class, 'user']);
-    Route::post('refresh', [UserAuthController::class, 'refresh']);
-    Route::post('logout', [UserAuthController::class, 'logout']);
+// Route::post('register', [AuthController::class, 'register'])
+//     ->name('register');
 
-    //usuarios
-    Route::get('usuarios', [UsuariosController::class, 'index']);
-    Route::get('usuarios/recientes/', [UsuariosController::class, 'recientes']);
-    Route::get('usuarios/{id}', [UsuariosController::class, 'show']);
-    Route::get('usuarios/update/{id}', [UsuariosController::class, 'update']);
+// Route::post('login', [AuthController::class, 'login'])
+//     ->name('login');
 
-    Route::put('usuarios/updateInfo/{id}', [UsuariosController::class, 'updatePersonalInformation']);
-    Route::delete('usuarios/delete/{id}', [UsuariosController::class, 'destroy']);
-    Route::get('usuarios/uploadImage', [UsuariosController::class, 'upload']);
-    Route::get('usuarios/image', [UsuariosController::class, 'getImage']);
-    Route::get('usuarios/deleteImage', [UsuariosController::class, 'deleteFotoPerfil']);
+Route::group(['middleware' => 'api', 'JwtAuth'], function ($router) {
 
+    // Auth
+    require __DIR__ . '/api_routes/auth.php';
 
-    //roles
-    Route::get('roles', [RolesController::class, 'index']);
-    Route::get('roles/{id}', [RolesController::class, 'rol']);
-    Route::put('roles/update/{id}', [RolesController::class, 'update']);
+    // Currency
+    require __DIR__ . '/api_routes/currency.php';
 
-    //directorio
-    Route::get('directorios', [DirectorioController::class, 'index']);
-    Route::get('directorios/{id}', [DirectorioController::class, 'show']);
-    Route::get('update', [DirectorioController::class, 'update']);
+    // Directorios
+    require __DIR__ . '/api_routes/directory.php';
 
-    //pagos
-    Route::get('pagos', [PagosController::class, 'index']);
-    Route::get('pagos/recientes/', [PagosController::class, 'recientes']);
-    Route::get('pagos/{id}', [PagosController::class, 'show']);
-    Route::get('pagos/pagosbyUser/{id}', [PagosController::class, 'pagosbyUser']);
-    Route::get('update', [PagosController::class, 'update']);
+    // Pagos
+    require __DIR__ . '/api_routes/payment.php';
 
-    //productos
-    Route::get('productos', [ProductosController::class, 'index']);
-    Route::get('productos/{id}', [ProductosController::class, 'show']);
-    Route::get('update', [ProductosController::class, 'update']);
+    // Pagos
+    require __DIR__ . '/api_routes/permissions.php';
 
+    // Productos
+    require __DIR__ . '/api_routes/plans.php';
+
+    // Roles
+    require __DIR__ . '/api_routes/roles.php';
 
 });
